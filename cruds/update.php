@@ -1,0 +1,110 @@
+<?php
+header('Content-Type: application/json');
+
+
+include '../db.php';
+
+$table = $_POST['table'] ?? '';
+
+switch($table){
+
+    case 'academic':
+        $course      = $_POST['course'] ?? '';
+        $institution = $_POST['institution'] ?? '';
+        $board       = $_POST['board'] ?? '';
+        $year        = $_POST['year'] ?? 0;
+        $percentage  = $_POST['percentage'] ?? 0;
+        $id          = $_POST['id'] ?? 0;
+
+        
+        if(!preg_match(
+            '/^[A-Za-z\s]+$/',$course)){
+            echo json_encode(["success"=>false,"message"=>"No Numeric is allowed"]);
+            exit;
+        }
+
+        if(!preg_match(
+            '/^[A-Za-z\s]+$/',$institution)){
+            echo json_encode(["success"=>false,"message"=>"No Numeric is allowed"]);
+            exit;
+        }
+
+        if(!preg_match('/^(202[0-9]|2030)$/', $year)){
+            echo json_encode(["success"=>false,"message"=>"Please enter a valid year (Between 2020–2030)"]);
+            exit;
+        }
+
+        if(!preg_match('/^(100|[0-9]{1,2})$/', $percentage)){
+            echo json_encode(["success"=>false,"message"=>"Please enter valid percentage (0–100)"]);
+            exit;
+        }
+
+        $sql = "UPDATE academics SET course=?, institution=?, board=?, year=?, percentage=? WHERE sno=?";
+
+        $stmt = $conn->prepare($sql);
+
+        $stmt->bind_param("sssiii", $course, $institution, $board, $year, $percentage, $id);
+
+
+        if($stmt->execute()){
+            echo json_encode(["status" => "success"]);
+        } else {
+            echo json_encode(["status" => "error", "message" => $stmt->error]);
+        }
+        break;
+
+    case 'leave':
+        $type       = $_POST['type'] ?? '';
+        $date       = $_POST['date'] ?? '';
+        $reason     = $_POST['reason'] ?? '';
+        $id         = $_POST['leaveId'];
+
+        $sql = "UPDATE absent SET type=?, date=?, reason=? WHERE sno=?";
+
+        $stmt = $conn->prepare($sql);
+
+        $stmt->bind_param("sssi", $type, $date, $reason, $id);
+
+        if($stmt->execute()){
+            echo json_encode(["status" => "success"]);
+        } else {
+            echo json_encode(["status" => "error", "message" => $stmt->error]);
+        }
+        break;
+        
+    case 'family':
+        $name       = $_POST['name'] ?? '';
+        $gender     = $_POST['gender'] ?? '';
+        $relation   = $_POST['relation'] ?? '';
+        $mobile     = $_POST['mobile'] ?? '';
+        $id         = $_POST['familyId'];
+
+
+
+        
+            if(!preg_match(
+                '/^[A-Za-z\s]+$/',$name)){
+                echo json_encode(["success"=>false,"message"=>"Enter a valid Name"]);
+                exit;
+            }
+
+            if(!preg_match(
+                '/^[6-9][0-9]{9}/',$mobile)){
+                echo json_encode(["success"=>false,"message"=>"Enter a valid Mobile Number"]);
+                exit;
+            }
+            
+        
+        $sql = "UPDATE family SET name=?, gender=?, relation=?, mobile=? WHERE sno=?";
+        
+        $stmt = $conn->prepare($sql);
+        
+        $stmt->bind_param("ssssi", $name, $gender, $relation, $mobile, $id);
+        
+        if($stmt->execute()){
+            echo json_encode(["status" => "success"]);
+        } else {
+            echo json_encode(["status" => "error", "message" => $stmt->error]);
+        }
+        break;
+}
