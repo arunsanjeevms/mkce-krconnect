@@ -29,6 +29,12 @@ switch($table){
             exit;
         }
 
+                if(!preg_match(
+            '/^[A-Za-z\s]+$/',$board)){
+            echo json_encode(["success"=>false,"message"=>"Please enter Valid Institution"]);
+            exit;
+        }
+
         if(!preg_match('/^(202[0-9]|2030)$/', $year)){
             echo json_encode(["success"=>false,"message"=>"Please enter a valid year (Between 2020–2030)"]);
             exit;
@@ -59,6 +65,21 @@ switch($table){
         $reason     = $_POST['reason'] ?? '';
         $id         = $_POST['leaveId'];
 
+         if (empty(trim($type))) {
+            echo json_encode(["success" => false, "message" => "Leave/OD is required"]);
+            exit;
+        }
+        
+        if (empty(trim($date))) {
+            echo json_encode(["success" => false, "message" => "Date is required"]);
+            exit;
+        }
+        
+        if (empty(trim($reason))) {
+            echo json_encode(["success" => false, "message" => "Reason is required"]);
+            exit;
+        }
+
         $sql = "UPDATE absent SET type=?, date=?, reason=? WHERE sno=?";
 
         $stmt = $conn->prepare($sql);
@@ -88,9 +109,18 @@ switch($table){
                 exit;
             }
 
-            if(!preg_match(
-                '/^[6-9][0-9]{9}/',$mobile)){
-                echo json_encode(["success"=>false,"message"=>"Enter a valid Mobile Number"]);
+            if (empty(trim($gender))) {
+                echo json_encode(["success" => false, "message" => "Gender is required"]);
+                exit;
+            }
+
+            if (empty(trim($relation))) {
+                echo json_encode(["success" => false, "message" => "Relationship is required"]);
+                exit;
+            }
+
+            if (!preg_match('/^[6-9]\d{9}$/', $mobile)) {
+                echo json_encode(["success" => false, "message" => "Enter a valid Mobile Number"]);
                 exit;
             }
             

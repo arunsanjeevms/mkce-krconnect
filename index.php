@@ -1306,7 +1306,7 @@
         });
 
         $(document).on("click", "#edit_familyConfirm", function() {
-            console.log("Clicked Edit Academic Confirm");
+            console.log("Clicked Edit Family Confirm");
 
             $.ajax({
                 url: './cruds/update.php',
