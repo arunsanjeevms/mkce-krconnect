@@ -1,0 +1,1 @@
+"<?php include 'db.php'; $result = mysqli_query($conn, 'SELECT * FROM absent LIMIT 1'); if($result) { $columns = mysqli_fetch_fields($result); foreach($columns as $column) { echo $column->name . PHP_EOL; } } ?>"  

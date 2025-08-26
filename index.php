@@ -8,7 +8,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MIC</title>
+    <title>MIC - Student</title>
     <link rel="icon" type="image/png" sizes="32x32" href="image/icons/mkce_s.png">
     <link rel="stylesheet" href="style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
@@ -665,6 +665,7 @@
                             <input type="file" class="form-control" id="edit_proof" name="proof"
                                 accept=".jpg,.jpeg,.png,.pdf" required>
                         </div>
+
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -1374,6 +1375,14 @@
             $("#proofContainer").html(html);
         });
 
+
+        $(document).on("click", ".reasonView", function() {
+            Swal.fire({
+                title: "Rejection - Reason",
+                text: $(this).data("reason"),
+                icon: "error"
+            });
+        })
 
 
     })

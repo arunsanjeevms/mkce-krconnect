@@ -86,6 +86,7 @@ switch($action){
         $reason = $_POST['reason'] ?? '';
         $proofPath = "";
 
+
         if (empty(trim($type))) {
             echo json_encode(["success" => false, "message" => "Leave/OD is required"]);
             exit;
@@ -100,11 +101,11 @@ switch($action){
             echo json_encode(["success" => false, "message" => "Reason is required"]);
             exit;
         }
-    
+
         $sql = "INSERT INTO absent (type, date, reason) VALUES (?, ?, ?)";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("sss", $type, $date, $reason);
-    
+
         if ($stmt->execute()) {
             $leaveId = $conn->insert_id; 
     

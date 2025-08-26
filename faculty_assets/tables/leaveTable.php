@@ -8,13 +8,12 @@
             <th>Date</th>
             <th>Reason</th>
             <th>Proof</th>
-            <th>Action</th>
-
+            <th>Status</th>
         </tr>
     </thead>
     <tbody>
         <?php
-        $sql="SELECT * FROM absent";
+        $sql="SELECT * FROM absent WHERE status = 'Pending'";
         $result = mysqli_query($conn, $sql);
         $sno=1;
         while($row=mysqli_fetch_assoc($result)){
@@ -24,8 +23,9 @@
 
             $formattedDate = date('d-m-Y', strtotime($row['date']));
             echo "<td>".$formattedDate."</td>";
-
+            
             echo "<td>".$row['reason']."</td>";
+
 
 
             if (!empty($row['proof'])) {
@@ -40,49 +40,22 @@
             } else {
                 echo "<td class='text-center align-middle text-muted'>No Proof Uploaded </td>";
             }
-
-        if($row['status'] == 'Pending') {
+            
+            
             echo "<td class='text-center align-middle'>
 
-                <button class='btn btn-warning btn-sm edit_leave' 
-                    data-id='".$row['sno']."'
-                    data-type='".$row['type']."'
-                    data-date='".$row['date']."'
-                    data-reason='".$row['reason']."'>
-                    <i class='fa-solid fa-pencil'></i> Edit
+                <button  class='btn btn-success btn-sm approve_leave' data-id='".$row['sno']."' >
+                    <i class='fa-solid fa-check'></i> Approve
                 </button>
-                
-                <button class='btn btn-danger btn-sm del_leave' data-id='".$row['sno']."' >
-                    <i class='fa-solid fa-trash'></i> Delete
+
+                <button type='button' data-bs-toggle='modal' data-bs-target='#leaveRejectModal' class='btn btn-danger btn-sm reject_leave' data-id='".$row['sno']."' >
+                    <i class='fa-solid fa-xmark'></i> Reject
                 </button>
             </td>";
+
             
             echo "</tr>";
         }
-        
-        else{
-
-            if($row['status'] == 'Approved') {
-                echo "<td class='text-center align-middle'>
-                    <button class='btn btn-success btn-sm' disabled>".$row['status']."</button>
-                </td>";
-            }
-            else{
-                echo "<td class='text-center align-middle'>
-                <button type='button' class='btn btn-danger btn-sm reasonView' data-reason='".$row['status']."'><i class='fa-solid fa-question'></i> Rejected</button>
-            </td>";
-
-            }
-
-
-
-        echo "</tr>";
-
-
-        }   
-    
-    }
-
         ?>
     </tbody>
 </table>
